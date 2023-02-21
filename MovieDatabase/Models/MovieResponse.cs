@@ -12,16 +12,13 @@ namespace MovieDatabase.Models
         [Required]
         public int MovieID { get; set; }
 
-        [Required]
-        public string Category { get; set; }
-
-        [Required]
+        [Required(ErrorMessage = "Movie Title is Required")]
         public string Title { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Year of Release is Required")]
         public int Year { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Director's name is Required")]
         public string Director { get; set; }
 
         [Required]
@@ -33,5 +30,11 @@ namespace MovieDatabase.Models
 
         [StringLength(25)]
         public string Notes { get; set; }
+
+
+        //Foreign Key relationship
+        [Required(ErrorMessage = "Movie Category is Required")]
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 }

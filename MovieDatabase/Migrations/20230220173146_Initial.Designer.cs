@@ -8,7 +8,7 @@ using MovieDatabase.Models;
 namespace MovieDatabase.Migrations
 {
     [DbContext(typeof(EnterMovieContext))]
-    [Migration("20230213153630_Initial")]
+    [Migration("20230220173146_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,15 +17,65 @@ namespace MovieDatabase.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.32");
 
+            modelBuilder.Entity("MovieDatabase.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            CategoryName = "Action"
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            CategoryName = "Comedy"
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            CategoryName = "Mystery"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            CategoryName = "Drama"
+                        },
+                        new
+                        {
+                            CategoryId = 5,
+                            CategoryName = "Horror"
+                        },
+                        new
+                        {
+                            CategoryId = 6,
+                            CategoryName = "Romance"
+                        },
+                        new
+                        {
+                            CategoryId = 7,
+                            CategoryName = "Other"
+                        });
+                });
+
             modelBuilder.Entity("MovieDatabase.Models.MovieResponse", b =>
                 {
                     b.Property<int>("MovieID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Director")
                         .IsRequired()
@@ -54,13 +104,15 @@ namespace MovieDatabase.Migrations
 
                     b.HasKey("MovieID");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("responses");
 
                     b.HasData(
                         new
                         {
                             MovieID = 1,
-                            Category = "Action",
+                            CategoryId = 1,
                             Director = "Joseph Kosinski",
                             Edited = false,
                             Rating = "PG-13",
@@ -70,7 +122,7 @@ namespace MovieDatabase.Migrations
                         new
                         {
                             MovieID = 2,
-                            Category = "Mystery/Comedy",
+                            CategoryId = 3,
                             Director = "Rian Johnson",
                             Edited = false,
                             Rating = "PG-13",
@@ -80,13 +132,22 @@ namespace MovieDatabase.Migrations
                         new
                         {
                             MovieID = 3,
-                            Category = "Comedy/Drama",
+                            CategoryId = 4,
                             Director = "Marc Forster",
                             Edited = false,
                             Rating = "PG-13",
                             Title = "A Man Called Otto",
                             Year = 2022
                         });
+                });
+
+            modelBuilder.Entity("MovieDatabase.Models.MovieResponse", b =>
+                {
+                    b.HasOne("MovieDatabase.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
